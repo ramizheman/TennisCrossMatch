@@ -1,0 +1,37 @@
+# Environment / secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+venv*/
+.venv/
+env/
+
+# Test output artefacts
+_tm_test*.txt
+_xm_test*.txt
+
+# IDE
+.vscode/
+.cursor/
+*.suo
+*.user
+
+# Data (large, not versioned)
+*.faiss
+*.pkl
+*.pickle
+
+# OS
+.DS_Store
+Thumbs.db
