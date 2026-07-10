@@ -183,11 +183,25 @@ class CrossMatchEngine:
         t0 = time.time()
 
         # ── Step 1: compute plan once (1 LLM call) ───────────────────────────
+        # Try refs in order until one loads successfully (guards against a bad
+        # ref appearing at position 0 — it will be caught and skipped in fan-out).
         cached_plan = None
         if reuse_plan:
-            self.load_match(refs[0])
-            cached_plan = self.agent._plan_question(question)
-            if progress:
+            plan_loaded = False
+            for plan_ref in refs:
+                try:
+                    self.load_match(plan_ref)
+                    cached_plan = self.agent._plan_question(question)
+                    plan_loaded = True
+                    break
+                except Exception as _plan_err:
+                    if progress:
+                        print(f"[plan] {plan_ref.match_id} failed ({_plan_err}), trying next ref")
+            if not plan_loaded:
+                # All refs failed to load for plan — fall back to per-match planning
+                if progress:
+                    print("[plan] no ref loaded successfully; falling back to per-match plan")
+            elif progress:
                 ops = [f"{o.get('route')}:{o.get('metrics') or o.get('chain_logic') or ''}"
                        for o in cached_plan[0].get("ops", [])]
                 print(f"[plan] parsed once -> ops={ops}")
