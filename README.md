@@ -64,7 +64,21 @@ Override with:
 set TENNIS_DATA_DIR=C:\path\to\your\per_match_json
 ```
 
-## Quick start
+## Web UI
+
+```bash
+cd TennisCrossMatch
+# activate a venv that has the deps (or: pip install -r requirements.txt)
+python web_app.py
+```
+
+Open **http://127.0.0.1:7861**
+
+- **Manual filters** (default): set players / surface / dates, then ask — most reliable
+- **Auto (LLM)**: scope planner picks matches from the question alone
+- Optional **Preview matches** to see how many files are in scope before asking
+
+## Quick start (Python)
 
 ```python
 from dotenv import load_dotenv
